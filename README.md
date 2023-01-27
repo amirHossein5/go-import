@@ -4,7 +4,7 @@ Auto import keyword, or remove unused imports of golang in sublime text.
 
 ## Installation
 
-Clone repository inside sublime's Packages folder `sublime-text/Packages`:
+Clone repository inside sublime's Packages folder `/Packages`(open command plette, search and click on `Browse packages`):
 
 ```sh
 git clone https://github.com/amirHossein5/go-import.git
