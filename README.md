@@ -1,2 +1,6 @@
-# go-import
-Plugin of sublime text, for importing or removing unused imports of golang.
+Auto import keyword, or remove unused imports of golang in sublime text.
+
+## Demo
+
+## Installation
+
