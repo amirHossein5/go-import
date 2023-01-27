@@ -1,0 +1,14 @@
+[
+    { "caption": "GoImport: Import", "command": "go_import"},
+    { "caption": "GoImport: remove unused imports", "command": "go_import_erase_unused"},
+    {
+        "caption": "GoImport: Edit key bindings",
+        "command": "edit_settings",
+        "args":
+        {
+            "base_file": "${packages}/go-import/Default.sublime-keymap",
+            "user_file": "${packages}/User/Default ($platform).sublime-keymap",
+            "default": "[\n\t$0\n]\n"
+        }
+    }
+]

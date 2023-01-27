@@ -1,0 +1,4 @@
+[
+    { "keys": ["alt+i"], "command": "go_import" },
+    { "keys": ["alt+e"], "command": "go_import_erase_unused" },
+]
