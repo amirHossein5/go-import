@@ -2,6 +2,10 @@ Auto import keyword, or remove unused imports of golang in sublime text.
 
 ## Demo
 
+<div align="center">
+  <img src="demo.gif"/>
+</div>
+
 ## Installation
 
 Clone the repository inside sublime's Packages folder(open command plette, search and click on `Browse packages`):
