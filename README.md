@@ -1,9 +1,9 @@
-Auto import keyword, or remove unused imports of golang in sublime text.
+Auto import keywords, or remove unused imports of golang in sublime text.
 
 ## Demo
 
 <div align="center">
-  <img src="demo.gif"/>
+  <img src="demo.gif" width="700"/>
 </div>
 
 ## Installation
