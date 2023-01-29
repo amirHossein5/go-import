@@ -14,6 +14,12 @@ Clone the repository inside sublime's Packages folder(open command plette, searc
 git clone https://github.com/amirHossein5/go-import.git
 ```
 
+Or you may clone latest release:
+
+```sh
+git clone -b v0.1.0 https://github.com/amirHossein5/go-import.git
+```
+
 ## Commands
 
 Available commands:
