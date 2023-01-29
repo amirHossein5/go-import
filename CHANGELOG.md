@@ -4,7 +4,7 @@
 
 ### Added
 
-- Find libraries inside opened project.
+- Find libraries inside opened project and from installed ones.
 - Unlocal libraries array.
 
 ### Improved

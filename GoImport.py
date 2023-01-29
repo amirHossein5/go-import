@@ -5,10 +5,6 @@ import os
 
 parantheseImportRegex = r"import.*\((.|\n)*?\)";
 qouteImportRegex = r"import.*\"(.*)\"";
-UnLocalLibs = [
-    ['gorm', 'gorm.io/gorm'],
-    ['postgres', 'gorm.io/driver/postgres'],
-]
 
 class GoImportCommand(sublime_plugin.TextCommand):
     def run(self, edit):
@@ -37,29 +33,40 @@ class GoImportCommand(sublime_plugin.TextCommand):
 
     # removes words that are not in /usr/lib/go/src/...
     # removed words that are not directory in opened directory
-    # removed words that are not in UnlocalLibs variable
+    # removed words that are not installed
     # e.g, utf8 to unicode/utf8 based on /usr/lib/go/src/...
     def get_full_word_names(self, words):
         full_word_names = [];
-        searchInPaths = [self.view.window().extract_variables()['folder'], '/usr/lib/go/src'];
+        currentProjectPath = self.view.window().extract_variables()['folder'];
+        searchInPaths = [
+            currentProjectPath,
+            '/usr/lib/go/src',
+            '~/go/pkg/mod/cache/download',
+        ];
 
         for w in words:
             found = False;
 
-            for l in UnLocalLibs:
-                if w == l[0]: full_word_names.append(l[1]); found = True; break;
-
             for path in searchInPaths:
+                path = os.path.expanduser(path);
+
                 for l in os.listdir(path):
                     if not os.path.isdir(path.rstrip('/')+'/'+l): continue
-                    if w == l: full_word_names.append(w); found = True; break;
+                    if w == l:
+                        # including project module name itself
+                        if path == currentProjectPath:
+                            w = get_project_module_name(currentProjectPath)+'/'+w
+
+                        full_word_names.append(w); found = True; break;
 
                 if found: continue;
 
                 for l in os.walk(path):
                     if '/testdata' in l[0]: continue
                     l = l[0].replace(path.rstrip('/')+'/', '')
-                    if w in l: full_word_names.append(l); break;
+                    l = re.sub('@.*$', '', l)
+
+                    if w == l.split('/')[-1]: full_word_names.append(l); break;
 
         return full_word_names;
 
@@ -168,6 +175,20 @@ def page_imports(view, edit, words):
     if len(words) == 0: view.replace(edit, view.find('package.*\n\n', 0), view.substr(packageViewRegion)); return;
 
     view.replace(edit, replaceViewRegion, importString);
+
+# get project module name based on go.mod
+def get_project_module_name(projectPath):
+    path = os.path.expanduser(projectPath);
+    goModPath = path+'/'+'go.mod';
+
+    if not (os.path.exists(goModPath) and os.path.isfile(goModPath)): return ''
+
+    with open(goModPath, 'r') as f:
+        line = f.readline();
+        if bool(re.match("module.*", line)):
+            return re.findall("module.*", line)[0].split(' ')[-1]
+
+    return '';
 
 # get imported words of page
 def get_imported_words(view):
