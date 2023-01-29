@@ -6,6 +6,11 @@ Auto import keywords, or remove unused imports of golang in sublime text.
   <img src="demo.gif" width="700"/>
 </div>
 
+Finds imports from:
+- Opened project path(if has `go.mod`)
+- Go library itself(`/usr/lib/go/src`)
+- Installed packages(`~/go/pkg/mod/cache/download`)
+
 ## Installation
 
 Clone the repository inside sublime's Packages folder(open command plette, search and click on `Browse packages`):
