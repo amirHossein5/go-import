@@ -5,12 +5,15 @@ import os
 
 parantheseImportRegex = r"import.*\((.|\n)*?\)";
 qouteImportRegex = r"import.*\"(.*)\"";
+UnLocalLibs = [
+    ['gorm', 'gorm.io/gorm']
+]
 
 class GoImportCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         if ('Go' not in self.view.syntax().name): return
 
-        words = self.filter_words(self.get_words());
+        words = self.filter_imported_words(self.get_words());
         words = list(set(words));
 
         if len(words) == 0: sublime.status_message('GoImport: already imported.'); return;
@@ -31,13 +34,16 @@ class GoImportCommand(sublime_plugin.TextCommand):
 
         return words;
 
-    # removes words that are not in /usr/lib/go/src/...
+    # removes words that are not in /usr/lib/go/src/... or not in UnlocalLibs variable
     # e.g, utf8 to unicode/utf8 based on /usr/lib/go/src/...
     def get_full_word_names(self, words):
         full_word_names = [];
 
         for w in words:
             found = False;
+
+            for l in UnLocalLibs:
+                if w == l[0]: full_word_names.append(l[1]); found = True; break;
 
             for l in os.listdir('/usr/lib/go/src/'):
                 if not os.path.isdir('/usr/lib/go/src/'+l): continue
@@ -53,7 +59,7 @@ class GoImportCommand(sublime_plugin.TextCommand):
         return full_word_names;
 
     # removes words that are already imported.
-    def filter_words(self, words):
+    def filter_imported_words(self, words):
         if (not has_import_key_word(self.view)):
             return words;
 
