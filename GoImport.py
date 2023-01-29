@@ -54,19 +54,27 @@ class GoImportCommand(sublime_plugin.TextCommand):
                     if not os.path.isdir(path.rstrip('/')+'/'+l): continue
                     if w == l:
                         # including project module name itself
-                        if path == currentProjectPath:
-                            w = get_project_module_name(currentProjectPath)+'/'+w
+                        if currentProjectPath in path:
+                            moduleName = get_project_module_name(currentProjectPath)
+                            if moduleName: w = moduleName+'/'+w
 
                         full_word_names.append(w); found = True; break;
 
                 if found: continue;
 
                 for l in os.walk(path):
+                    fullPath = l
                     if '/testdata' in l[0]: continue
                     l = l[0].replace(path.rstrip('/')+'/', '')
                     l = re.sub('@.*$', '', l)
 
-                    if w == l.split('/')[-1]: full_word_names.append(l); break;
+                    if w == l.split('/')[-1]:
+                        # including project module name itself
+                        if currentProjectPath in fullPath[0]:
+                            moduleName = get_project_module_name(currentProjectPath)
+                            if moduleName: l = moduleName+'/'+l
+
+                        full_word_names.append(l); break;
 
         return full_word_names;
 
