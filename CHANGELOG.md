@@ -1,9 +1,10 @@
 ## CHANGE LOG
 
-## v0.2.1
+## v
 
 ### Added
 
+- Find libraries inside opened project.
 - Unlocal libraries array.
 
 ### Improved

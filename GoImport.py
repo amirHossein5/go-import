@@ -35,10 +35,13 @@ class GoImportCommand(sublime_plugin.TextCommand):
 
         return words;
 
-    # removes words that are not in /usr/lib/go/src/... or not in UnlocalLibs variable
+    # removes words that are not in /usr/lib/go/src/...
+    # removed words that are not directory in opened directory
+    # removed words that are not in UnlocalLibs variable
     # e.g, utf8 to unicode/utf8 based on /usr/lib/go/src/...
     def get_full_word_names(self, words):
         full_word_names = [];
+        searchInPaths = ['/usr/lib/go/src/', self.view.window().extract_variables()['folder']+'/'];
 
         for w in words:
             found = False;
@@ -46,16 +49,17 @@ class GoImportCommand(sublime_plugin.TextCommand):
             for l in UnLocalLibs:
                 if w == l[0]: full_word_names.append(l[1]); found = True; break;
 
-            for l in os.listdir('/usr/lib/go/src/'):
-                if not os.path.isdir('/usr/lib/go/src/'+l): continue
-                if w == l: full_word_names.append(w); found = True; break;
+            for path in searchInPaths:
+                for l in os.listdir(path):
+                    if not os.path.isdir(path+l): continue
+                    if w == l: full_word_names.append(w); found = True; break;
 
-            if found: continue;
+                if found: continue;
 
-            for l in os.walk('/usr/lib/go/src/'):
-                if '/testdata' in l[0]: continue
-                l = l[0].replace('/usr/lib/go/src/', '')
-                if w in l: full_word_names.append(l); break;
+                for l in os.walk(path):
+                    if '/testdata' in l[0]: continue
+                    l = l[0].replace(path, '')
+                    if w in l: full_word_names.append(l); break;
 
         return full_word_names;
 
