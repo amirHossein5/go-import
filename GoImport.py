@@ -6,7 +6,8 @@ import os
 parantheseImportRegex = r"import.*\((.|\n)*?\)";
 qouteImportRegex = r"import.*\"(.*)\"";
 UnLocalLibs = [
-    ['gorm', 'gorm.io/gorm']
+    ['gorm', 'gorm.io/gorm'],
+    ['postgres', 'gorm.io/driver/postgres'],
 ]
 
 class GoImportCommand(sublime_plugin.TextCommand):
@@ -53,7 +54,7 @@ class GoImportCommand(sublime_plugin.TextCommand):
 
             for l in os.walk('/usr/lib/go/src/'):
                 if '/testdata' in l[0]: continue
-                l = l[0].replace ('/usr/lib/go/src/', '')
+                l = l[0].replace('/usr/lib/go/src/', '')
                 if w in l: full_word_names.append(l); break;
 
         return full_word_names;
@@ -69,8 +70,8 @@ class GoImportCommand(sublime_plugin.TextCommand):
             isAlreadyImported = False;
 
             for iw in imported_words:
-                if w not in iw: isAlreadyImported = isAlreadyImported or False;
-                if w in iw: isAlreadyImported = True;
+                if w != iw.split('/')[-1]: isAlreadyImported = isAlreadyImported or False;
+                else: isAlreadyImported = True;
 
             if not isAlreadyImported: filteredWords.append(w)
 
@@ -178,7 +179,7 @@ def get_imported_words(view):
     elif bool(qouteImportRegion):
         importString = view.substr(qouteImportRegion)
 
-    words = re.findall(r"[a-zA-Z0-9\/]+", importString);
+    words = re.findall(r"[a-zA-Z0-9\/\.]+", importString);
     if 'import' in words: words.remove('import');
 
     return words;
