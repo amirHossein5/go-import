@@ -25,16 +25,18 @@ Or you may clone latest release:
 git clone -b v0.1.0 https://github.com/amirHossein5/go-import.git
 ```
 
+## Default key bindings
+
+For modifing key bindings open command plette then `GoImport: Edit key bindings`. 
+
+Available Default key bindings:
+
+- `alt+i` -> command: `go_import`
+- `alt+e` -> command: `go_import_erase_unused`
+
 ## Commands
 
 Available commands:
 
 - `go_import`: Import libs under cursor(s).
 - `go_import_erase_unused`: Removes unused imports.
-
-## Default key bindings
-
-For modifing key bindings open command plette then `GoImport: Edit key bindings`. Available Default key bindings:
-
-- `alt+i` -> `go_import`
-- `alt+e` -> `go_import_erase_unused`
