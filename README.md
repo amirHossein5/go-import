@@ -40,3 +40,7 @@ Available commands:
 
 - `go_import`: Import libs under cursor(s).
 - `go_import_erase_unused`: Removes unused imports.
+
+## LICENCE
+
+Licensed under the [MIT license](https://opensource.org/licenses/MIT).
