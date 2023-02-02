@@ -1,11 +1,11 @@
 ## CHANGE LOG
 
-## v
+## [v0.2.1](https://github.com/amirHossein5/go-import/compare/v0.1.0...v0.2.1)
 
 ### Added
 
-- Find libraries inside opened project and from installed ones.
-- Unlocal libraries array.
+- Find libraries inside opened project.
+- Find installed libraries.
 
 ### Improved
 
