@@ -157,6 +157,7 @@ class GoImportEraseUnusedCommand(sublime_plugin.TextCommand):
 # words that page imports
 def page_imports(view, edit, words):
     words = list(set(words));
+    words.sort()
     packageViewRegion = view.find('package.*$', 0);
     importString = "";
 

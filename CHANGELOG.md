@@ -1,5 +1,11 @@
 ## CHANGE LOG
 
+## [v0.](https://github.com/amirHossein5/go-import/compare/v0.2.1...v0.)
+
+### Added
+
+- Sorting imports when importing.
+
 ## [v0.2.1](https://github.com/amirHossein5/go-import/compare/v0.1.0...v0.2.1)
 
 ### Added
