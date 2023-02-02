@@ -1,4 +1,4 @@
-Auto import keywords, or remove unused imports of golang in sublime text.
+Auto import keyword(s), or remove unused imports of golang in sublime text.
 
 ## Demo
 
