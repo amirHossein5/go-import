@@ -37,7 +37,12 @@ class GoImportCommand(sublime_plugin.TextCommand):
     # e.g, utf8 to unicode/utf8 based on /usr/lib/go/src/...
     def get_full_word_names(self, words):
         full_word_names = [];
-        currentProjectPath = self.view.window().extract_variables()['folder'];
+        currentProjectPath = False
+        sublimeVariables = self.view.window().extract_variables()
+
+        if 'folder' in sublimeVariables:
+            currentProjectPath = self.view.window().extract_variables()['folder'];
+
         searchInPaths = [
             currentProjectPath,
             '/usr/lib/go/src',
@@ -48,6 +53,7 @@ class GoImportCommand(sublime_plugin.TextCommand):
             found = False;
 
             for path in searchInPaths:
+                if not path: continue
                 path = os.path.expanduser(path);
 
                 for l in os.listdir(path):
