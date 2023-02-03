@@ -13,13 +13,13 @@ jobs:
           python-version: '3.10'
       
       - name: Installing black and format code
-        run: |
-          pip install git+https://github.com/psf/black
-          python -m black .
+        run: pip install git+https://github.com/psf/black
+      - name: Format code
+        run: python -m black .
     
       - name: push changes
         run: |
-          git config --global user.name "amirHossein5"
-          git config --global user.email "amir5665@yahoo.com"
+          git config --global user.name "black formatter"
+          git config --global user.email "username@users.noreply.github.com"
           git commit -a -m "Apply black formatted code"
           git push
