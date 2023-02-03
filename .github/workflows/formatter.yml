@@ -18,7 +18,6 @@ jobs:
           python -m black .
     
       - name: push changes
-        if: steps.auto-commit-action.outputs.changes_detected == 'true'
         run: |
           git config --global user.name "amirHossein5"
           git config --global user.email "amir5665@yahoo.com"
