@@ -3,227 +3,277 @@ import sublime_plugin
 import re
 import os
 
-parantheseImportRegex = r"import.*\((.|\n)*?\)";
-qouteImportRegex = r"import.*\"(.*)\"";
+parantheseImportRegex = r"import.*\((.|\n)*?\)"
+qouteImportRegex = r"import.*\"(.*)\""
+
 
 class GoImportCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        if ('Go' not in self.view.syntax().name): return
+        if "Go" not in self.view.syntax().name:
+            return
 
-        words = self.filter_imported_words(self.get_words());
-        words = list(set(words));
+        words = self.filter_imported_words(self.get_words())
+        words = list(set(words))
 
-        if len(words) == 0: sublime.status_message('GoImport: already imported.'); return;
+        if len(words) == 0:
+            sublime.status_message("GoImport: already imported.")
+            return
 
-        words = self.get_full_word_names(words);
+        words = self.get_full_word_names(words)
 
-        if (len(words) == 0): sublime.status_message("GoImport: keyword not found"); return
+        if len(words) == 0:
+            sublime.status_message("GoImport: keyword not found")
+            return
 
-        self.import_words(edit, words);
+        self.import_words(edit, words)
 
     # get import key words by active cursors
     def get_words(self):
-        words = [];
+        words = []
 
         for cursor in self.view.sel():
-            word = self.view.substr(self.view.word(cursor)).strip();
-            if (bool(re.match("^[a-zA-Z0-9]+$", word))): words.append(word);
+            word = self.view.substr(self.view.word(cursor)).strip()
+            if bool(re.match("^[a-zA-Z0-9]+$", word)):
+                words.append(word)
 
-        return words;
+        return words
 
     # removes words that are not in /usr/lib/go/src/...
     # removes words that are not directory in opened directory
     # removes words that are not installed
     # e.g, utf8 to unicode/utf8 based on /usr/lib/go/src/...
     def get_full_word_names(self, words):
-        full_word_names = [];
+        full_word_names = []
         currentProjectPath = False
         sublimeVariables = self.view.window().extract_variables()
 
-        if 'folder' in sublimeVariables:
-            currentProjectPath = self.view.window().extract_variables()['folder'];
+        if "folder" in sublimeVariables:
+            currentProjectPath = self.view.window().extract_variables()["folder"]
 
         searchInPaths = [
             currentProjectPath,
-            '/usr/lib/go/src',
-            '~/go/pkg/mod/cache/download',
-        ];
+            "/usr/lib/go/src",
+            "~/go/pkg/mod/cache/download",
+        ]
 
         for w in words:
-            found = False;
+            found = False
 
             for path in searchInPaths:
-                if not path: continue
-                path = os.path.expanduser(path);
+                if not path:
+                    continue
+                path = os.path.expanduser(path)
 
                 for l in os.listdir(path):
-                    if not os.path.isdir(path.rstrip('/')+'/'+l): continue
+                    if not os.path.isdir(path.rstrip("/") + "/" + l):
+                        continue
                     if w == l:
                         # including project module name itself
                         if currentProjectPath in path:
                             moduleName = get_project_module_name(currentProjectPath)
-                            if moduleName: w = moduleName+'/'+w
+                            if moduleName:
+                                w = moduleName + "/" + w
 
-                        full_word_names.append(w); found = True; break;
+                        full_word_names.append(w)
+                        found = True
+                        break
 
-                if found: continue;
+                if found:
+                    continue
 
                 for l in os.walk(path):
                     fullPath = l
-                    if '/testdata' in l[0]: continue
-                    l = l[0].replace(path.rstrip('/')+'/', '')
-                    l = re.sub('@.*$', '', l)
+                    if "/testdata" in l[0]:
+                        continue
+                    l = l[0].replace(path.rstrip("/") + "/", "")
+                    l = re.sub("@.*$", "", l)
 
-                    if w == l.split('/')[-1]:
+                    if w == l.split("/")[-1]:
                         # including project module name itself
                         if currentProjectPath in fullPath[0]:
                             moduleName = get_project_module_name(currentProjectPath)
-                            if moduleName: l = moduleName+'/'+l
+                            if moduleName:
+                                l = moduleName + "/" + l
 
-                        full_word_names.append(l); break;
+                        full_word_names.append(l)
+                        break
 
-        return full_word_names;
+        return full_word_names
 
     # removes words that are already imported.
     def filter_imported_words(self, words):
-        if (not has_import_key_word(self.view)):
-            return words;
+        if not has_import_key_word(self.view):
+            return words
 
-        filteredWords = [];
-        imported_words = get_imported_words(self.view);
+        filteredWords = []
+        imported_words = get_imported_words(self.view)
         for w in words:
-            isAlreadyImported = False;
+            isAlreadyImported = False
 
             for iw in imported_words:
-                if w != iw.split('/')[-1]: isAlreadyImported = isAlreadyImported or False;
-                else: isAlreadyImported = True;
+                if w != iw.split("/")[-1]:
+                    isAlreadyImported = isAlreadyImported or False
+                else:
+                    isAlreadyImported = True
 
-            if not isAlreadyImported: filteredWords.append(w)
+            if not isAlreadyImported:
+                filteredWords.append(w)
 
-        return filteredWords;
+        return filteredWords
 
     # add given words to imports
     def import_words(self, edit, words):
-        if len(words) == 0: return;
+        if len(words) == 0:
+            return
 
-        if has_import_key_word(self.view): words += get_imported_words(self.view)
+        if has_import_key_word(self.view):
+            words += get_imported_words(self.view)
 
-        page_imports(self.view, edit, words);
+        page_imports(self.view, edit, words)
 
-        sublime.status_message('GoImport: imported!');
+        sublime.status_message("GoImport: imported!")
 
 
 class GoImportEraseUnusedCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        if ('Go' not in self.view.syntax().name): return
+        if "Go" not in self.view.syntax().name:
+            return
 
-        importedWords = get_imported_words(self.view);
-        unusedWords = self.get_unused_words(importedWords);
+        importedWords = get_imported_words(self.view)
+        unusedWords = self.get_unused_words(importedWords)
 
-        if len(unusedWords) == 0: sublime.status_message('GoImport: no unused import found.'); return;
+        if len(unusedWords) == 0:
+            sublime.status_message("GoImport: no unused import found.")
+            return
 
-        self.erase_imports(edit, unusedWords);
+        self.erase_imports(edit, unusedWords)
 
     # removes import keywords
     def erase_imports(self, edit, unusedWords):
-        if len(unusedWords) == 0: return;
+        if len(unusedWords) == 0:
+            return
 
-        remainedWords = [];
+        remainedWords = []
         imported_words = get_imported_words(self.view)
 
         for iw in imported_words:
-            if iw not in unusedWords: remainedWords.append(iw)
+            if iw not in unusedWords:
+                remainedWords.append(iw)
 
-        page_imports(self.view, edit, remainedWords);
+        page_imports(self.view, edit, remainedWords)
 
-        sublime.status_message('GoImport: erased!')
+        sublime.status_message("GoImport: erased!")
 
     # returns unused import keywords in page
     def get_unused_words(self, words):
-        unusedWords = [];
+        unusedWords = []
 
         for fullWord in words:
-            w = fullWord;
-            if '/' in w: w = fullWord.split('/')[-1];
-            regions = self.view.find_all(w+'\.', 0);
+            w = fullWord
+            if "/" in w:
+                w = fullWord.split("/")[-1]
+            regions = self.view.find_all(w + "\.", 0)
 
-            if len(regions) == 0: unusedWords.append(fullWord); continue;
+            if len(regions) == 0:
+                unusedWords.append(fullWord)
+                continue
 
-            found = False;
+            found = False
 
             for region in regions:
-                line = self.view.substr(self.view.line(region));
-                if '//' in line: found = found or False;
-                else: found = True;
+                line = self.view.substr(self.view.line(region))
+                if "//" in line:
+                    found = found or False
+                else:
+                    found = True
 
-            if not found: unusedWords.append(fullWord)
+            if not found:
+                unusedWords.append(fullWord)
 
-        return unusedWords;
+        return unusedWords
+
 
 # words that page imports
 def page_imports(view, edit, words):
-    words = list(set(words));
+    words = list(set(words))
     words.sort()
-    packageViewRegion = view.find('package.*$', 0);
-    importString = "";
+    packageViewRegion = view.find("package.*$", 0)
+    importString = ""
 
     if not has_import_key_word(view):
-        if len(words) == 0: return;
-        replaceViewRegion = packageViewRegion;
-        importString = view.substr(packageViewRegion)+"\n\n";
+        if len(words) == 0:
+            return
+        replaceViewRegion = packageViewRegion
+        importString = view.substr(packageViewRegion) + "\n\n"
 
-        if len(words) == 1: importString+="import \""+words[0]+"\""
+        if len(words) == 1:
+            importString += 'import "' + words[0] + '"'
         else:
             importString += "import ("
-            for w in words: importString+="\n\t\""+w+"\""
+            for w in words:
+                importString += '\n\t"' + w + '"'
             importString += "\n)"
 
-        view.replace(edit, replaceViewRegion, importString);
-        return;
+        view.replace(edit, replaceViewRegion, importString)
+        return
 
-    replaceViewRegion = view.find(qouteImportRegex, 0) or view.find(parantheseImportRegex, 0);
+    replaceViewRegion = view.find(qouteImportRegex, 0) or view.find(
+        parantheseImportRegex, 0
+    )
     importString += "import ("
-    for w in words: importString+="\n\t\""+w+"\""
+    for w in words:
+        importString += '\n\t"' + w + '"'
     importString += "\n)"
 
-    if len(words) == 0: view.replace(edit, replaceViewRegion, "");
-    if len(words) == 0: view.replace(edit, view.find('package.*\n\n', 0), view.substr(packageViewRegion)); return;
+    if len(words) == 0:
+        view.replace(edit, replaceViewRegion, "")
+    if len(words) == 0:
+        view.replace(
+            edit, view.find("package.*\n\n", 0), view.substr(packageViewRegion)
+        )
+        return
 
-    view.replace(edit, replaceViewRegion, importString);
+    view.replace(edit, replaceViewRegion, importString)
+
 
 # get project module name based on go.mod
 def get_project_module_name(projectPath):
-    path = os.path.expanduser(projectPath);
-    goModPath = path+'/'+'go.mod';
+    path = os.path.expanduser(projectPath)
+    goModPath = path + "/" + "go.mod"
 
-    if not (os.path.exists(goModPath) and os.path.isfile(goModPath)): return ''
+    if not (os.path.exists(goModPath) and os.path.isfile(goModPath)):
+        return ""
 
-    with open(goModPath, 'r') as f:
-        line = f.readline();
+    with open(goModPath, "r") as f:
+        line = f.readline()
         if bool(re.match("module.*", line)):
-            return re.findall("module.*", line)[0].split(' ')[-1]
+            return re.findall("module.*", line)[0].split(" ")[-1]
 
-    return '';
+    return ""
+
 
 # get imported words of page
 def get_imported_words(view):
-    if not has_import_key_word(view): return [];
+    if not has_import_key_word(view):
+        return []
 
-    parantheseImportRegion = view.find(parantheseImportRegex, 0);
-    qouteImportRegion = view.find(qouteImportRegex, 0);
+    parantheseImportRegion = view.find(parantheseImportRegex, 0)
+    qouteImportRegion = view.find(qouteImportRegex, 0)
 
     # if has import with parantheses ()
     if bool(parantheseImportRegion):
-        importString = view.substr(parantheseImportRegion);
+        importString = view.substr(parantheseImportRegion)
     # if has import inside ""
     elif bool(qouteImportRegion):
         importString = view.substr(qouteImportRegion)
 
-    words = re.findall(r"[a-zA-Z0-9\/\.]+", importString);
-    if 'import' in words: words.remove('import');
+    words = re.findall(r"[a-zA-Z0-9\/\.]+", importString)
+    if "import" in words:
+        words.remove("import")
 
-    return words;
+    return words
+
 
 # determine page has any importes
 def has_import_key_word(view):
-    return bool(view.find('import', 0))
+    return bool(view.find("import", 0))
