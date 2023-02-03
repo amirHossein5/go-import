@@ -1,10 +1,10 @@
-name: formatter
+name: black formatter
 on: [push, pull_request]
 jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
           
@@ -17,6 +17,10 @@ jobs:
           pip install git+https://github.com/psf/black
           python -m black .
     
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Apply black formatter changes
+      - name: push changes
+        if: steps.auto-commit-action.outputs.changes_detected == 'true'
+        run: |
+          git config --global user.name "amirHossein5"
+          git config --global user.email "amir5665@yahoo.com"
+          git commit -a -m "Apply black formatted code"
+          git push
