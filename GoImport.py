@@ -32,8 +32,8 @@ class GoImportCommand(sublime_plugin.TextCommand):
         return words;
 
     # removes words that are not in /usr/lib/go/src/...
-    # removed words that are not directory in opened directory
-    # removed words that are not installed
+    # removes words that are not directory in opened directory
+    # removes words that are not installed
     # e.g, utf8 to unicode/utf8 based on /usr/lib/go/src/...
     def get_full_word_names(self, words):
         full_word_names = [];
