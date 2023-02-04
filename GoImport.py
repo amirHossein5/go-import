@@ -16,7 +16,9 @@ class GoImportCommand(sublime_plugin.TextCommand):
             sublime.status_message("GoImport: already imported.")
             return
 
-        words = utils.get_full_word_names(self.view, words)
+        words = utils.get_full_word_names(
+            self.view, self.get_searchable_paths(), words
+        )
 
         if len(words) == 0:
             sublime.status_message("GoImport: keyword not found")
@@ -24,6 +26,15 @@ class GoImportCommand(sublime_plugin.TextCommand):
 
         utils.import_words(self.view, edit, words)
         sublime.status_message("GoImport: imported!")
+
+    # Returns paths for searching import keywords
+    def get_searchable_paths(self):
+        paths = [
+            utils.get_currect_project_path(self.view),
+            get_GOROOT().rstrip('/')+'/src',
+            get_GOMODCACHE().rstrip('/')+'/cache/download',
+        ]
+        return [p for p in paths if p]
 
 
 class GoImportEraseUnusedCommand(sublime_plugin.TextCommand):
@@ -41,3 +52,25 @@ class GoImportEraseUnusedCommand(sublime_plugin.TextCommand):
 
         utils.erase_imports(self.view, edit, unusedWords)
         sublime.status_message("GoImport: erased!")
+
+
+def get_GOROOT():
+    GOROOT = ''
+
+    settings = sublime.load_settings('GoImport.sublime-settings')
+    GOROOT = settings.get('GOROOT')
+
+    if not GOROOT or GOROOT == '':
+        return "/usr/lib/go"
+    return GOROOT
+
+
+def get_GOMODCACHE():
+    GOMODCACHE = ''
+
+    settings = sublime.load_settings('GoImport.sublime-settings')
+    GOMODCACHE = settings.get('GOMODCACHE')
+
+    if not GOMODCACHE or GOMODCACHE == '':
+        return "~/go/pkg/mod"
+    return GOMODCACHE

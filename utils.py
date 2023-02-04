@@ -17,11 +17,10 @@ def get_words(view):
     return words
 
 
-# e.g, utf8 to unicode/utf8 based on get_searchable_paths()
-def get_full_word_names(view, words):
+# e.g, utf8 to unicode/utf8 based on given paths
+def get_full_word_names(view, searchablePaths, words):
     fullWordNames = []
     currentProjectPath = get_currect_project_path(view)
-    searchablePaths = get_searchable_paths(view)
 
     for w in words:
         fullWord = full_word_name(view, w, searchablePaths)
@@ -116,16 +115,6 @@ def get_project_module_name_if_in_path(view, path):
         return ""
 
     return get_project_module_name(currentProjectPath)
-
-
-# Returns paths for searching import keywords
-def get_searchable_paths(view):
-    paths = [
-        get_currect_project_path(view),
-        "/usr/lib/go/src",
-        "~/go/pkg/mod/cache/download",
-    ]
-    return [p for p in paths if p]
 
 
 # Returns opened project path

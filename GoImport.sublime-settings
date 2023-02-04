@@ -1,0 +1,5 @@
+{
+    // Fill these based on output of `go env` depending on your os,
+    "GOROOT": "/usr/lib/go",
+    "GOMODCACHE": "~/go/pkg/mod"
+}
