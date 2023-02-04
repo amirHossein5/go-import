@@ -9,7 +9,7 @@
 
 ## Fixed
 
-- Fix to not considering import line itself when erasing unused imports.
+- Fix to not consider import line itself when erasing unused imports.
 - Being unable to import when no project is open.
 
 ## [v0.2.1](https://github.com/amirHossein5/go-import/compare/v0.1.0...v0.2.1)
