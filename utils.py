@@ -43,7 +43,7 @@ def full_word_name(view, word, paths):
         if len(fullWords) != 0:
             if len(fullWords) == 1:
                 return fullWords[0]
-            return fullWords[0]
+            return fullWords
 
     for path in paths:
         fullWord = check_full_word_name_recursive_in_path(
