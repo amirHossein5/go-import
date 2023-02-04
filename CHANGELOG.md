@@ -1,6 +1,6 @@
 ## CHANGE LOG
 
-## [v0.](https://github.com/amirHossein5/go-import/compare/v0.2.1...v0.)
+## [v0.3.0](https://github.com/amirHossein5/go-import/compare/v0.2.1...v0.3.0)
 
 ### Added
 
