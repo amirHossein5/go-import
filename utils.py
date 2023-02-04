@@ -284,6 +284,8 @@ def get_unused_words(view, words):
             line = view.substr(view.line(region))
             if "//" in line:
                 found = found or False
+            elif "import " in line:
+                found = found or False
             else:
                 found = True
 
