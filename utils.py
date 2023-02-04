@@ -39,12 +39,7 @@ def full_word_name(view, word, paths):
     currentProjectPath = get_currect_project_path(view)
 
     for path in paths:
-        fullWords = check_full_word_name_in_cache(
-            view,
-            word,
-            path,
-            currentProjectPath
-        )
+        fullWords = check_full_word_name_in_cache(view, word, path, currentProjectPath)
         if len(fullWords) != 0:
             if len(fullWords) == 1:
                 return fullWords[0]
@@ -52,12 +47,9 @@ def full_word_name(view, word, paths):
 
     for path in paths:
         fullWord = check_full_word_name_recursive_in_path(
-            view,
-            word,
-            path,
-            currentProjectPath
+            view, word, path, currentProjectPath
         )
-        if fullWord != '':
+        if fullWord != "":
             return fullWord
 
     return False
@@ -86,8 +78,8 @@ def check_full_word_name_in_cache(view, word, path, currentProjectPath):
 
         moduleName = get_project_module_name_if_in_path(view, path)
 
-        if moduleName != '':
-            words.append(moduleName+'/'+directory)
+        if moduleName != "":
+            words.append(moduleName + "/" + directory)
             continue
 
         words.append(directory)
@@ -108,12 +100,12 @@ def check_full_word_name_in_path(view, word, path, currentProjectPath):
 
         moduleName = get_project_module_name_if_in_path(view, path)
 
-        if moduleName != '':
-            return moduleName+'/'+word
+        if moduleName != "":
+            return moduleName + "/" + word
 
         return word
 
-    return ''
+    return ""
 
 
 # Checks for full word name in path recursively
@@ -135,12 +127,12 @@ def check_full_word_name_recursive_in_path(view, word, path, currentProjectPath)
 
         moduleName = get_project_module_name_if_in_path(view, path)
 
-        if moduleName != '':
-            return moduleName+'/'+directory
+        if moduleName != "":
+            return moduleName + "/" + directory
 
         return directory
 
-    return ''
+    return ""
 
 
 # if path is opened project, return project module name
@@ -235,7 +227,7 @@ def remove_all_imports(view, edit):
 
 # Returns a string of imports
 def get_import_string(words):
-    importString = ''
+    importString = ""
 
     if len(words) == 0:
         return importString
@@ -322,7 +314,7 @@ def get_unused_words(view, words):
                 found = found or False
             elif "import " in line:
                 found = found or False
-            elif '"'+w in line:
+            elif '"' + w in line:
                 found = found or False
             else:
                 found = True

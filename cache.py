@@ -1,9 +1,10 @@
 import os
 
+
 def cache_directory_paths_of_path(path):
     cacheFilePath = generate_file_path(path)
 
-    with open(cacheFilePath, 'w') as file:
+    with open(cacheFilePath, "w") as file:
         for itemPath in os.walk(path):
             if os.path.isfile(itemPath[0]):
                 continue
@@ -12,19 +13,19 @@ def cache_directory_paths_of_path(path):
             if "/testdata" in directoryPath:
                 continue
 
-            file.write(directoryPath+"\n")
+            file.write(directoryPath + "\n")
 
 
 def get_cache_file(path):
     filePath = generate_file_path(path)
     if not os.path.exists(filePath):
         return []
-    return open(filePath, 'r')
+    return open(filePath, "r")
 
 
 def generate_file_name(path):
-    return path.replace('/', '.').strip('.')+'.cache'
+    return path.replace("/", ".").strip(".") + ".cache"
 
 
 def generate_file_path(path):
-    return os.path.dirname(__file__)+'/'+generate_file_name(path)
+    return os.path.dirname(__file__) + "/" + generate_file_name(path)
