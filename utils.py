@@ -1,5 +1,6 @@
 import re
 import os
+from . import cache
 
 parantheseImportRegex = r"import.*\((.|\n)*?\)"
 qouteImportRegex = r"import.*\"(.*)\""
@@ -38,15 +39,18 @@ def full_word_name(view, word, paths):
     currentProjectPath = get_currect_project_path(view)
 
     for path in paths:
-        fullWord = check_full_word_name_in_path(
+        fullWords = check_full_word_name_in_cache(
             view,
             word,
             path,
             currentProjectPath
         )
-        if fullWord != '':
-            return fullWord
+        if len(fullWords) != 0:
+            if len(fullWords) == 1:
+                return fullWords[0]
+            return fullWords[0]
 
+    for path in paths:
         fullWord = check_full_word_name_recursive_in_path(
             view,
             word,
@@ -57,6 +61,38 @@ def full_word_name(view, word, paths):
             return fullWord
 
     return False
+
+
+# Checks for full word name in cached file
+def check_full_word_name_in_cache(view, word, path, currentProjectPath):
+    words = []
+
+    for itemPath in cache.get_cache_file(path):
+        itemPath = itemPath.strip()
+
+        if not os.path.exists(itemPath):
+            continue
+
+        directoryPath = itemPath
+
+        if "/testdata" in directoryPath:
+            continue
+
+        directory = directoryPath.replace(path.rstrip("/") + "/", "")
+        directory = re.sub("@.*$", "", directory)
+
+        if word != directory.split("/")[-1]:
+            continue
+
+        moduleName = get_project_module_name_if_in_path(view, path)
+
+        if moduleName != '':
+            words.append(moduleName+'/'+directory)
+            continue
+
+        words.append(directory)
+
+    return words
 
 
 # Checks for full word name in path non recursively
@@ -285,6 +321,8 @@ def get_unused_words(view, words):
             if "//" in line:
                 found = found or False
             elif "import " in line:
+                found = found or False
+            elif '"'+w in line:
                 found = found or False
             else:
                 found = True

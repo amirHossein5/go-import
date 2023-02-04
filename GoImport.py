@@ -1,6 +1,18 @@
 import sublime
 import sublime_plugin
+import os
 from . import utils
+from . import cache
+
+
+def plugin_loaded():
+    GOROOT = get_GOROOT().rstrip('/')+'/src'
+    GOMODCACHE = get_GOMODCACHE().rstrip('/')+'/cache/download'
+
+    for path in [GOROOT, GOMODCACHE]:
+        if path == '' or not os.path.exists(path):
+            return
+        cache.cache_directory_paths_of_path(path)
 
 
 class GoImportCommand(sublime_plugin.TextCommand):
@@ -62,7 +74,7 @@ def get_GOROOT():
 
     if not GOROOT or GOROOT == '':
         return "/usr/lib/go"
-    return GOROOT
+    return os.path.expanduser(GOROOT)
 
 
 def get_GOMODCACHE():
@@ -73,4 +85,4 @@ def get_GOMODCACHE():
 
     if not GOMODCACHE or GOMODCACHE == '':
         return "~/go/pkg/mod"
-    return GOMODCACHE
+    return os.path.expanduser(GOMODCACHE)

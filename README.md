@@ -13,7 +13,7 @@ Finds imports from:
 
 ## Installation
 
-Clone the repository inside sublime's Packages folder(open command plette, search and click on `Browse packages`):
+Clone the repository inside sublime's Packages folder(open command palette, search and click on `Browse packages`):
 
 ```sh
 git clone https://github.com/amirHossein5/go-import.git
@@ -26,7 +26,7 @@ To edit: `GoImport: Settings`.
 
 ## Default key bindings
 
-For modifing key bindings open command plette then `GoImport: Edit key bindings`. 
+For modifing key bindings open command palette then `GoImport: Edit key bindings`.
 
 Available Default key bindings:
 

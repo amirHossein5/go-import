@@ -4,6 +4,7 @@
 
 ### Added
 
+- Cache paths of GOROOT and GOMODCACHE to import faster.
 - Sorting imports when importing.
 - Add Settings file for setting GOROOT and GOMODCACHE for other OS.
 
