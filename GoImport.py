@@ -20,20 +20,17 @@ class GoImportCommand(sublime_plugin.TextCommand):
         if "Go" not in self.view.syntax().name:
             return
 
-        if args and 'words' in args:
-            utils.import_words(self.view, edit, args['words'])
+        if args and "words" in args:
+            utils.import_words(self.view, edit, args["words"])
             return
 
-        words = utils.filter_imported_words(
-            self.view, utils.get_words(self.view)
-        )
+        words = utils.filter_imported_words(self.view, utils.get_words(self.view))
 
         if len(words) == 0:
             sublime.status_message("GoImport: already imported.")
             return
 
-        words = utils.get_full_word_names(
-            self.view, self.get_searchable_paths(), words)
+        words = utils.get_full_word_names(self.view, self.get_searchable_paths(), words)
 
         if len(words) == 0:
             sublime.status_message("GoImport: keyword not found")
@@ -60,11 +57,9 @@ class GoImportCommand(sublime_plugin.TextCommand):
         if len(self.importList) == 0:
             return
 
-        self.view.run_command('go_import', {
-            "args": {
-                "words": [self.importList[0][index]]
-            }
-        })
+        self.view.run_command(
+            "go_import", {"args": {"words": [self.importList[0][index]]}}
+        )
         self.importList.pop(0)
 
         if len(self.importList) != 0:
