@@ -8,8 +8,8 @@ Auto import keyword(s), or remove unused imports of golang in sublime text. Also
 
 Finds imports from:
 - Opened project path(if has `go.mod`)
-- Go library itself(`/usr/lib/go/src`)
-- Installed packages(`~/go/pkg/mod/cache/download`)
+- Go library itself(GOROOT)
+- Installed packages(GOMODCACHE)
 
 ## Installation
 
@@ -18,6 +18,11 @@ Clone the repository inside sublime's Packages folder(open command plette, searc
 ```sh
 git clone https://github.com/amirHossein5/go-import.git
 ```
+
+## Settings
+
+By default GOROOT and GOMODCACHE are `/usr/lib/go`, `~/go/pkg/mod`.
+To edit: `GoImport: Settings`.
 
 ## Default key bindings
 
