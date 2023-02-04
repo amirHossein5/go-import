@@ -43,7 +43,7 @@ class GoImportEraseUnusedCommand(sublime_plugin.TextCommand):
             return
 
         unusedWords = utils.get_unused_words(
-            self.view, get_imported_words(self.view)
+            self.view, utils.get_imported_words(self.view)
         )
 
         if len(unusedWords) == 0:
