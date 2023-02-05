@@ -19,6 +19,12 @@ Clone the repository inside sublime's Packages folder(open command palette, sear
 git clone https://github.com/amirHossein5/go-import.git
 ```
 
+Then you may checkout to latest tag:
+
+```sh
+cd go-import && git checkout v
+```
+
 ## Settings
 
 By default GOROOT and GOMODCACHE are `/usr/lib/go`, `~/go/pkg/mod`.
