@@ -3,7 +3,7 @@ Auto import keyword(s), or remove unused imports of golang in sublime text. Also
 ## Demo
 
 <div align="center">
-  <img src="demo.gif" width="700"/>
+  <img src="demo.gif" width="900"/>
 </div>
 
 Finds imports from:
