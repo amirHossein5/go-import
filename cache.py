@@ -1,6 +1,7 @@
 import os
 import tempfile
 
+
 def cache_directory_paths_of_path(path):
     cacheFilePath = generate_file_path(path)
 
