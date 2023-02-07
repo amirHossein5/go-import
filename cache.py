@@ -1,5 +1,5 @@
 import os
-
+import tempfile
 
 def cache_directory_paths_of_path(path):
     cacheFilePath = generate_file_path(path)
@@ -24,8 +24,8 @@ def get_cache_file(path):
 
 
 def generate_file_name(path):
-    return path.replace("/", ".").strip(".") + ".cache"
+    return path.replace("/", ".").strip(".") + ".tmp"
 
 
 def generate_file_path(path):
-    return os.path.dirname(__file__) + "/" + generate_file_name(path)
+    return tempfile.gettempdir() + "/" + generate_file_name(path)
