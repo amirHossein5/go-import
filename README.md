@@ -13,17 +13,13 @@ Finds imports from:
 
 ## Installation
 
-Clone the repository inside sublime's Packages folder(open command palette, search and click on `Browse packages`):
+Open command palette `Package Control: Add Repository`:
 
-```sh
-git clone https://github.com/amirHossein5/go-import.git
+```
+https://github.com/amirHossein5/go-import
 ```
 
-Then you *may* checkout to latest tag:
-
-```sh
-cd go-import && git checkout v
-```
+Then install it using package control by name of `go-import`
 
 ## Settings
 
