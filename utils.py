@@ -67,7 +67,7 @@ def check_full_word_name_in_cache(view, word, path, currentProjectPath):
 
         directoryPath = itemPath
 
-        if "/testdata" in directoryPath:
+        if "/testdata" in directoryPath or "vendor/" in directoryPath:
             continue
 
         directory = directoryPath.replace(path.rstrip("/") + "/", "")
@@ -116,7 +116,7 @@ def check_full_word_name_recursive_in_path(view, word, path, currentProjectPath)
 
         directoryPath = itemPath[0]
 
-        if "/testdata" in directoryPath:
+        if "/testdata" in directoryPath or "vendor/" in directoryPath:
             continue
 
         directory = directoryPath.replace(path.rstrip("/") + "/", "")
