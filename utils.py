@@ -27,10 +27,10 @@ def get_full_word_names(view, searchablePaths, words):
     for w in words:
         fullWord = full_word_name(view, w, searchablePaths)
         if isinstance(fullWord, str):
-            fullWord = fullWord.strip('/')
+            fullWord = fullWord.strip("/")
         else:
             for i, w in enumerate(fullWord):
-                fullWord[i] = w.strip('/')
+                fullWord[i] = w.strip("/")
 
         if fullWord:
             fullWordNames.append(fullWord)
@@ -101,9 +101,7 @@ def check_full_word_name_in_cache(view, word, path, currentProjectPath):
         moduleName = get_project_module_name_if_in_path(view, path)
 
         if moduleName != "":
-            words.append(
-                moduleName + "/" + directory.replace(path.rstrip("/"), "")
-            )
+            words.append(moduleName + "/" + directory.replace(path.rstrip("/"), ""))
             continue
 
         words.append(directory)
@@ -155,9 +153,7 @@ def check_full_word_name_recursive_in_path(view, word, path, currentProjectPath)
         moduleName = get_project_module_name_if_in_path(view, path)
 
         if moduleName != "":
-            words.append(
-                moduleName + "/" + directory.replace(path.rstrip("/"), "")
-            )
+            words.append(moduleName + "/" + directory.replace(path.rstrip("/"), ""))
             continue
 
         words.append(directory)
