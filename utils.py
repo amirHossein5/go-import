@@ -265,7 +265,7 @@ def get_imported_words(view):
 
     importString = view.substr(get_import_view_region(view))
 
-    words = re.findall(r"[a-zA-Z0-9\/\.]+", importString)
+    words = re.findall(r"\"(.+)\"", importString)
     if "import" in words:
         words.remove("import")
 
