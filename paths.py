@@ -1,6 +1,7 @@
 import sublime
 import os
 
+
 def get_GOROOT():
     GOROOT = ""
 

@@ -39,7 +39,9 @@ def get_full_word_names(view, searchablePaths, words):
 # Returns false if no module found
 def full_word_name(view, word, paths):
     currentProjectPath = get_currect_project_path(view)
-    paths = [os.path.expanduser(p) for p in paths if p != "" and p != currentProjectPath]
+    paths = [
+        os.path.expanduser(p) for p in paths if p != "" and p != currentProjectPath
+    ]
     fullWords = []
 
     words = check_full_word_name_recursive_in_path(
@@ -125,7 +127,7 @@ def check_full_word_name_in_path(view, word, path, currentProjectPath):
 # Checks for full word name in path recursively
 # Returns array of name(s)
 def check_full_word_name_recursive_in_path(view, word, path, currentProjectPath):
-    words = [];
+    words = []
 
     for itemPath in os.walk(path):
         if os.path.isfile(itemPath[0]):
@@ -255,7 +257,7 @@ def get_import_string(words):
         importString += "import ("
         for w in words:
             if w == "":
-                importString += '\n'
+                importString += "\n"
             else:
                 importString += '\n\t"' + w + '"'
         importString += "\n)"
@@ -265,12 +267,12 @@ def get_import_string(words):
 
 # separetes imports of standard go library from another places
 def separate_imports(words):
-    GOROOT = paths.get_GOROOT() + '/src'
+    GOROOT = paths.get_GOROOT() + "/src"
     standardLibs = []
     anotherLibs = []
 
     for w in words:
-        if os.path.isdir(GOROOT+'/'+w):
+        if os.path.isdir(GOROOT + "/" + w):
             standardLibs.append(w)
         else:
             anotherLibs.append(w)
