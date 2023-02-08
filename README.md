@@ -19,7 +19,7 @@ Open command palette `Package Control: Add Repository`:
 https://github.com/amirHossein5/go-import
 ```
 
-Then install it using package control by name of `go-import`
+Then install it using package control by name of `go-import`. Finally restart sublime text.
 
 ## Settings
 
