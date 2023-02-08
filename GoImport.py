@@ -1,13 +1,14 @@
 import sublime
 import sublime_plugin
 import os
+from . import paths
 from . import utils
 from . import cache
 
 
 def plugin_loaded():
-    GOROOT = get_GOROOT().rstrip("/") + "/src"
-    GOMODCACHE = get_GOMODCACHE().rstrip("/") + "/cache/download"
+    GOROOT = paths.get_GOROOT() + "/src"
+    GOMODCACHE = paths.get_GOMODCACHE() + "/cache/download"
 
     for path in [GOROOT, GOMODCACHE]:
         if path == "" or not os.path.exists(path):
@@ -67,12 +68,12 @@ class GoImportCommand(sublime_plugin.TextCommand):
 
     # Returns paths for searching import keywords
     def get_searchable_paths(self):
-        paths = [
+        searchablePaths = [
             utils.get_currect_project_path(self.view),
-            get_GOROOT().rstrip("/") + "/src",
-            get_GOMODCACHE().rstrip("/") + "/cache/download",
+            paths.get_GOROOT() + "/src",
+            paths.get_GOMODCACHE() + "/cache/download",
         ]
-        return [p for p in paths if p]
+        return [p for p in searchablePaths if p]
 
 
 class GoImportEraseUnusedCommand(sublime_plugin.TextCommand):
@@ -90,25 +91,3 @@ class GoImportEraseUnusedCommand(sublime_plugin.TextCommand):
 
         utils.erase_imports(self.view, edit, unusedWords)
         sublime.status_message("GoImport: erased!")
-
-
-def get_GOROOT():
-    GOROOT = ""
-
-    settings = sublime.load_settings("GoImport.sublime-settings")
-    GOROOT = settings.get("GOROOT")
-
-    if not GOROOT or GOROOT == "":
-        return "/usr/lib/go"
-    return os.path.expanduser(GOROOT)
-
-
-def get_GOMODCACHE():
-    GOMODCACHE = ""
-
-    settings = sublime.load_settings("GoImport.sublime-settings")
-    GOMODCACHE = settings.get("GOMODCACHE")
-
-    if not GOMODCACHE or GOMODCACHE == "":
-        return "~/go/pkg/mod"
-    return os.path.expanduser(GOMODCACHE)

@@ -1,6 +1,7 @@
 import re
 import os
 from . import cache
+from . import paths
 
 parantheseImportRegex = r"import.*\((.|\n)*?\)"
 qouteImportRegex = r"import.*\"(.*)\""
@@ -31,26 +32,39 @@ def get_full_word_names(view, searchablePaths, words):
     return fullWordNames
 
 
-# Full import name: e.g, utf8 to unicode/utf8, fmt to fmt, based on given paths
+# Full import name(s): e.g, utf8 to unicode/utf8, fmt to fmt, based on given paths
 # If coundn't find word in given paths returns False
+# Returns array if finds multiple modules with same name
+# Returns string if finds a module name
+# Returns false if no module found
 def full_word_name(view, word, paths):
-    fullWord = ""
-    paths = [os.path.expanduser(p) for p in paths if p != ""]
     currentProjectPath = get_currect_project_path(view)
+    paths = [os.path.expanduser(p) for p in paths if p != "" and p != currentProjectPath]
+    fullWords = []
+
+    words = check_full_word_name_recursive_in_path(
+        view, word, currentProjectPath, currentProjectPath
+    )
+    if len(words) != 0:
+        fullWords += words
 
     for path in paths:
-        fullWords = check_full_word_name_in_cache(view, word, path, currentProjectPath)
-        if len(fullWords) != 0:
+        words = check_full_word_name_in_cache(view, word, path, currentProjectPath)
+        if len(words) != 0:
+            fullWords += words
             if len(fullWords) == 1:
                 return fullWords[0]
             return fullWords
 
     for path in paths:
-        fullWord = check_full_word_name_recursive_in_path(
+        words = check_full_word_name_recursive_in_path(
             view, word, path, currentProjectPath
         )
-        if fullWord != "":
-            return fullWord
+        if len(words) != 0:
+            fullWords += words
+            if len(fullWords) == 1:
+                return fullWords[0]
+            return fullWords
 
     return False
 
@@ -109,7 +123,10 @@ def check_full_word_name_in_path(view, word, path, currentProjectPath):
 
 
 # Checks for full word name in path recursively
+# Returns array of name(s)
 def check_full_word_name_recursive_in_path(view, word, path, currentProjectPath):
+    words = [];
+
     for itemPath in os.walk(path):
         if os.path.isfile(itemPath[0]):
             continue
@@ -128,11 +145,12 @@ def check_full_word_name_recursive_in_path(view, word, path, currentProjectPath)
         moduleName = get_project_module_name_if_in_path(view, path)
 
         if moduleName != "":
-            return moduleName + "/" + directory
+            words.append(moduleName + "/" + directory)
+            continue
 
-        return directory
+        words.append(directory)
 
-    return ""
+    return words
 
 
 # if path is opened project, return project module name
@@ -196,7 +214,6 @@ def import_words(view, edit, words):
 # Pages imports these words
 def page_imports(view, edit, words):
     words = unique(words)
-    words.sort()
     packageViewRegion = view.find("package.*$", 0)
     packageStatement = view.substr(packageViewRegion)
 
@@ -234,12 +251,39 @@ def get_import_string(words):
     elif len(words) == 1:
         importString += 'import "' + words[0] + '"'
     else:
+        words = separate_imports(words)
         importString += "import ("
         for w in words:
-            importString += '\n\t"' + w + '"'
+            if w == "":
+                importString += '\n'
+            else:
+                importString += '\n\t"' + w + '"'
         importString += "\n)"
 
     return importString
+
+
+# separetes imports of standard go library from another places
+def separate_imports(words):
+    GOROOT = paths.get_GOROOT() + '/src'
+    standardLibs = []
+    anotherLibs = []
+
+    for w in words:
+        if os.path.isdir(GOROOT+'/'+w):
+            standardLibs.append(w)
+        else:
+            anotherLibs.append(w)
+
+    standardLibs.sort()
+    anotherLibs.sort()
+
+    if len(standardLibs) == 0:
+        return anotherLibs
+    if len(anotherLibs) == 0:
+        return standardLibs
+
+    return standardLibs + [""] + anotherLibs
 
 
 # Get project module name based on go.mod
