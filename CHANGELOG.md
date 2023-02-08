@@ -4,8 +4,12 @@
 
 ## Fixed
 
+- Separate standard library imports from another places with a new line.
+- Find list of words when navigating path recursively. 
+- Search for modules from current working directory every time before checking cached files.
 - Creating cache file inside of `tmp` folder not in sublime's zip file.
-
+- Fix Messing up imported keywords which contains `-` or any non word character.
+- Don't suggest import paths which has `vendor/` directory.
 
 ## [v0.3.0](https://github.com/amirHossein5/go-import/compare/v0.2.1...v0.3.0)
 
