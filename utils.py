@@ -292,7 +292,7 @@ def get_import_string(words):
 
 # separetes imports of standard go library from another places
 def separate_imports(words):
-    GOROOT = paths.get_GOROOT() + "/src"
+    GOROOT = paths.get_std_library_path()
     standardLibs = []
     anotherLibs = []
 
