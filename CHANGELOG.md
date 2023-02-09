@@ -11,6 +11,7 @@
 - Fix Messing up imported keywords when contains `-` or any non word character.
 - Don't suggest import paths which has `vendor/` directory.
 - Fix wrong import name when library is on the root of the opened project.
+- Fix not importing some of the GOMODCACHE packages.
 
 ## [v0.3.0](https://github.com/amirHossein5/go-import/compare/v0.2.1...v0.3.0)
 

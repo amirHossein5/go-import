@@ -95,13 +95,12 @@ def check_full_word_name_in_cache(view, word, path, currentProjectPath):
 
         directoryPath = itemPath
 
-        if "/testdata" in directoryPath or "vendor/" in directoryPath:
+        if not path_is_valid(directoryPath):
             continue
 
         directory = directoryPath.replace(path.rstrip("/") + "/", "")
-        directory = re.sub("@.*$", "", directory)
 
-        if word != directory.split("/")[-1]:
+        if word != remove_version_from_path(directory).split("/")[-1]:
             continue
 
         moduleName = get_project_module_name_if_in_path(view, path)
@@ -147,13 +146,12 @@ def check_full_word_name_recursive_in_path(view, word, path, currentProjectPath)
 
         directoryPath = itemPath[0]
 
-        if "/testdata" in directoryPath or "vendor/" in directoryPath:
+        if not path_is_valid(directoryPath):
             continue
 
         directory = directoryPath.replace(path.rstrip("/") + "/", "")
-        directory = re.sub("@.*$", "", directory)
 
-        if word != directory.split("/")[-1]:
+        if word != remove_version_from_path(directory).split("/")[-1]:
             continue
 
         moduleName = get_project_module_name_if_in_path(view, path)
@@ -166,6 +164,17 @@ def check_full_word_name_recursive_in_path(view, word, path, currentProjectPath)
 
     return words
 
+
+# Removes versioning from path
+# /some/path@v3.3.4/another to /some/path/another
+def remove_version_from_path(path):
+    modifiedPath = re.sub("@.*/", "/", path)
+
+    # if is /some/path@v3.3.4
+    if modifiedPath == path:
+        modifiedPath = re.sub("@.*", "", path)
+
+    return modifiedPath
 
 # if path is opened project, return project module name
 def get_project_module_name_if_in_path(view, path):
@@ -265,6 +274,9 @@ def get_import_string(words):
     elif len(words) == 1:
         importString += 'import "' + words[0] + '"'
     else:
+        for i, w in enumerate(words):
+            words[i] = remove_version_from_path(w)
+
         words = separate_imports(words)
         importString += "import ("
         for w in words:
@@ -289,6 +301,8 @@ def separate_imports(words):
         else:
             anotherLibs.append(w)
 
+    standardLibs = unique(standardLibs)
+    anotherLibs = unique(anotherLibs)
     standardLibs.sort()
     anotherLibs.sort()
 
