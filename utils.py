@@ -176,6 +176,7 @@ def remove_version_from_path(path):
 
     return modifiedPath
 
+
 # if path is opened project, return project module name
 def get_project_module_name_if_in_path(view, path):
     currentProjectPath = get_currect_project_path(view)
@@ -407,8 +408,8 @@ def path_is_valid(path):
     notValids = [
         "/testdata",
         "vendor/",
-        'cache/download',
-    ];
+        "cache/download",
+    ]
 
     for notValid in notValids:
         if notValid in path:

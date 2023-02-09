@@ -4,7 +4,8 @@ import os
 
 # Returns path of go standard library
 def get_std_library_path():
-    return get_GOROOT() + '/src'
+    return get_GOROOT() + "/src"
+
 
 def get_GOROOT():
     GOROOT = ""
