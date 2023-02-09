@@ -1,10 +1,6 @@
 ---
 name: Bug report
 about: Report something that's broken.
-title: ''
-labels: ''
-assignees: ''
-
 ---
 
 <!-- DO NOT THROW THIS AWAY -->
