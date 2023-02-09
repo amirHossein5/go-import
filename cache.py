@@ -12,6 +12,7 @@ def cache_directory_paths_of_path(path):
 
             directoryPath = itemPath[0]
             from . import utils
+
             if not utils.path_is_valid(directoryPath):
                 continue
 
