@@ -1,9 +1,9 @@
 import sublime
 import sublime_plugin
 import os
-from . import paths
-from . import utils
-from . import cache
+from .src import paths
+from .src import utils
+from .src import cache
 
 
 def plugin_loaded():
