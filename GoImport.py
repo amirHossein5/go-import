@@ -7,10 +7,10 @@ from . import cache
 
 
 def plugin_loaded():
-    GOROOT = paths.get_GOROOT() + "/src"
-    GOMODCACHE = paths.get_GOMODCACHE() + "/cache/download"
+    GO_STD_LIBRARY = paths.get_std_library_path()
+    GOMODCACHE = paths.get_GOMODCACHE()
 
-    for path in [GOROOT, GOMODCACHE]:
+    for path in [GO_STD_LIBRARY, GOMODCACHE]:
         if path == "" or not os.path.exists(path):
             return
         cache.cache_directory_paths_of_path(path)
@@ -70,8 +70,8 @@ class GoImportCommand(sublime_plugin.TextCommand):
     def get_searchable_paths(self):
         searchablePaths = [
             utils.get_currect_project_path(self.view),
-            paths.get_GOROOT() + "/src",
-            paths.get_GOMODCACHE() + "/cache/download",
+            paths.get_std_library_path(),
+            paths.get_GOMODCACHE(),
         ]
         return [p for p in searchablePaths if p]
 
