@@ -26,14 +26,16 @@ def get_full_word_names(view, searchablePaths, words):
 
     for w in words:
         fullWord = full_word_name(view, w, searchablePaths)
+        if not fullWord:
+            continue
+
         if isinstance(fullWord, str):
             fullWord = fullWord.strip("/")
         else:
             for i, w in enumerate(fullWord):
                 fullWord[i] = w.strip("/")
 
-        if fullWord:
-            fullWordNames.append(fullWord)
+        fullWordNames.append(fullWord)
 
     return fullWordNames
 
@@ -380,3 +382,18 @@ def get_unused_words(view, words):
 # Unique items of the list
 def unique(listArg):
     return list(set(listArg))
+
+
+# path does not contain testdata or vendor or ...
+def path_is_valid(path):
+    notValids = [
+        "/testdata",
+        "vendor/",
+        'cache/download',
+    ];
+
+    for notValid in notValids:
+        if notValid in path:
+            return False
+
+    return True

@@ -1,6 +1,6 @@
 import os
 import tempfile
-
+from . import utils
 
 def cache_directory_paths_of_path(path):
     cacheFilePath = generate_file_path(path)
@@ -11,7 +11,7 @@ def cache_directory_paths_of_path(path):
                 continue
 
             directoryPath = itemPath[0]
-            if "/testdata" in directoryPath:
+            if not utils.path_is_valid(directoryPath):
                 continue
 
             file.write(directoryPath + "\n")
