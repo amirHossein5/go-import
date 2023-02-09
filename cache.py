@@ -1,6 +1,5 @@
 import os
 import tempfile
-from . import utils
 
 
 def cache_directory_paths_of_path(path):
@@ -12,6 +11,7 @@ def cache_directory_paths_of_path(path):
                 continue
 
             directoryPath = itemPath[0]
+            from . import utils
             if not utils.path_is_valid(directoryPath):
                 continue
 
