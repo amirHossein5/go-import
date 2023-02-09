@@ -12,7 +12,7 @@ about: Report something that's broken.
 ### Description:
 
 <!-- Describe problem and expected behavior -->
-<!-- If possible provide a screenshot that explains your problem -->
+<!-- If possible provide screenshot that explains your problem -->
 
 ### Steps To Reproduce:
 
