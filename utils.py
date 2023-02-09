@@ -62,9 +62,11 @@ def full_word_name(view, word, paths):
         words = check_full_word_name_in_cache(view, word, path, currentProjectPath)
         if len(words) != 0:
             fullWords += words
-            if len(fullWords) == 1:
-                return fullWords[0]
-            return fullWords
+
+    if len(fullWords) == 1:
+        return fullWords[0]
+    if len(fullWords) != 0:
+        return fullWords
 
     for path in paths:
         words = check_full_word_name_recursive_in_path(
@@ -72,9 +74,11 @@ def full_word_name(view, word, paths):
         )
         if len(words) != 0:
             fullWords += words
-            if len(fullWords) == 1:
-                return fullWords[0]
-            return fullWords
+
+    if len(fullWords) == 1:
+        return fullWords[0]
+    if len(fullWords) != 0:
+        return fullWords
 
     return False
 
