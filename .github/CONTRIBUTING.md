@@ -1,23 +1,14 @@
-## Bug Fixes
+## Bug Reports
 
-All bug fixes should be sent to the **default** branch. Bug fixes should **never** be sent to the `master` or `main` branch unless they fix features that 
-exist in the upcoming major release.
+If you could, send pull requests, not bug reports. If you file a bug report, your issue should contain a title and a clear description of the issue. You should also include as much relevant information as possible and a code sample that demonstrates the issue.
 
-## Minor Features
+## Which Branch?
+
+All bug fixes should be sent to the **default** branch. Bug fixes should **never** be sent to the `master` or `main` branch unless they fix features that exist in the upcoming major release.
 
 Minor features that are fully backward compatible with the current release should be sent to the **default** branch.
 
-## Major Features
-
 Major new features or features with breaking changes should always be sent to the `master` or `main` branch, which contains the upcoming major release.
-
-## Pull Request Title 
-
-Pull Request title should contain the sent branch e.g, if repository has `main(master)`, and `1.x` branches, and the current default branch of the 
-repository be `1.x`:
-
-- If you are sending pull request to the `1.x` branch, title should start with `[1.x]`, 
-- If you are sending pull request to `master` or `main` branch, title should contain `[2.x]`.
 
 ## Coding Style
 
