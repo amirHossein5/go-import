@@ -1,5 +1,11 @@
 ## CHANGE LOG
 
+## [v0.3.2](https://github.com/amirHossein5/go-import/compare/v0.3.1...v0.3.2)
+
+## Fixed
+
+- Preventing caching when plugin is loading, because it results in lagging on start of sublime. Instead it caches paths on first import.
+
 ## [v0.3.1](https://github.com/amirHossein5/go-import/compare/v0.3.0...v0.3.1)
 
 ## Fixed

@@ -1,8 +1,20 @@
 import os
 import tempfile
+import datetime
 
 
-def cache_directory_paths_of_path(path):
+# when using optimizeCaching on cache_directory_paths_of_path function, it won't
+# cache again until X days later from file modification date.
+RECACHE_AFTER_DAYS = 5
+
+
+# Writes(caches) directory names of the given path into tmp file
+# optimizeCaching if be true it caches file if not cached recently and tmp file not be empty.
+def cache_directory_paths_of_path(path, optimizeCaching=False):
+    if optimizeCaching:
+        cachedFilePath = generate_file_path(path)
+        if cached_recently(cachedFilePath) and os.stat(cachedFilePath).st_size != 0: return
+
     cacheFilePath = generate_file_path(path)
 
     with open(cacheFilePath, "w") as file:
@@ -17,6 +29,15 @@ def cache_directory_paths_of_path(path):
                 continue
 
             file.write(directoryPath + "\n")
+
+
+def cached_recently(cachedFilePath):
+    if not os.path.exists(cachedFilePath): return False
+
+    modifiedDate = datetime.datetime.fromtimestamp(os.path.getmtime(cachedFilePath))
+    cacheAfterDate = datetime.datetime.today() + datetime.timedelta(days=RECACHE_AFTER_DAYS)
+
+    return modifiedDate < cacheAfterDate
 
 
 def get_cache_file(path):

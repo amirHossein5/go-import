@@ -6,20 +6,27 @@ from .src import utils
 from .src import cache
 
 
-def plugin_loaded():
+def cachePaths():
     GO_STD_LIBRARY = paths.get_std_library_path()
     GOMODCACHE = paths.get_GOMODCACHE()
 
-    for path in [GO_STD_LIBRARY, GOMODCACHE]:
-        if path == "" or not os.path.exists(path):
-            return
-        cache.cache_directory_paths_of_path(path)
+    if GO_STD_LIBRARY != "" and os.path.exists(GO_STD_LIBRARY):
+        cache.cache_directory_paths_of_path(GO_STD_LIBRARY, optimizeCaching = True)
+
+    if GOMODCACHE != "" and os.path.exists(GOMODCACHE):
+        cache.cache_directory_paths_of_path(GOMODCACHE)
 
 
 class GoImportCommand(sublime_plugin.TextCommand):
+    isCached = False
+
     def run(self, edit, args=None):
         if "Go" not in self.view.syntax().name:
             return
+
+        if not self.isCached:
+            cachePaths()
+            self.isCached = True
 
         if args and "words" in args:
             utils.import_words(self.view, edit, args["words"])
