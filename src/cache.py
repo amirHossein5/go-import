@@ -13,7 +13,8 @@ RECACHE_AFTER_DAYS = 5
 def cache_directory_paths_of_path(path, optimizeCaching=False):
     if optimizeCaching:
         cachedFilePath = generate_file_path(path)
-        if cached_recently(cachedFilePath) and os.stat(cachedFilePath).st_size != 0: return
+        if cached_recently(cachedFilePath) and os.stat(cachedFilePath).st_size != 0:
+            return
 
     cacheFilePath = generate_file_path(path)
 
@@ -32,10 +33,13 @@ def cache_directory_paths_of_path(path, optimizeCaching=False):
 
 
 def cached_recently(cachedFilePath):
-    if not os.path.exists(cachedFilePath): return False
+    if not os.path.exists(cachedFilePath):
+        return False
 
     modifiedDate = datetime.datetime.fromtimestamp(os.path.getmtime(cachedFilePath))
-    cacheAfterDate = datetime.datetime.today() + datetime.timedelta(days=RECACHE_AFTER_DAYS)
+    cacheAfterDate = datetime.datetime.today() + datetime.timedelta(
+        days=RECACHE_AFTER_DAYS
+    )
 
     return modifiedDate < cacheAfterDate
 

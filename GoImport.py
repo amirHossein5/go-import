@@ -11,7 +11,7 @@ def cachePaths():
     GOMODCACHE = paths.get_GOMODCACHE()
 
     if GO_STD_LIBRARY != "" and os.path.exists(GO_STD_LIBRARY):
-        cache.cache_directory_paths_of_path(GO_STD_LIBRARY, optimizeCaching = True)
+        cache.cache_directory_paths_of_path(GO_STD_LIBRARY, optimizeCaching=True)
 
     if GOMODCACHE != "" and os.path.exists(GOMODCACHE):
         cache.cache_directory_paths_of_path(GOMODCACHE)
